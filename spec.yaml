@@ -26,7 +26,7 @@ paths:
         200:
           description: OK
           schema:
-            $ref: '#/definitions/userBase'
+            $ref: '#/definitions/userCreateResponse'
         400:
           description: Bad Request
           schema:
@@ -194,7 +194,74 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/error'
+
+  /login:
+    post:
+      summary: Login with given credentials
+      description: Login with given credentials
+      parameters:
+        - in: body
+          name: LoginCredentials
+          required: true
+          schema:
+            $ref: '#/definitions/loginCredentials'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/loginResponse'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error'
+
 definitions:
+  userCreateResponse:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/userBase'
+      credentials:
+        $ref: '#/definitions/loginResponse'
+  loginCredentials:
+    type: object
+    required:
+      - username
+      - password
+    properties:
+      username:
+        type: string
+        example: 'info@investinafairfuture.org'
+        description: 'Email address of the user'
+      password:
+        type: string
+        example: 'abcd1234'
+        description: 'Password of the user'
+  loginResponse:
+    type: object
+    required:
+      - token
+    properties:
+      token:
+        type: string
+        example: RsT5OjbzRn430zqMLgV3Ia
+        description: Access Token
+      validUntil:
+        type: string
+        example: '2019-04-30 14:00:00'
+        description: Date and GMT time for the token expiration
   companyArray:
     type: object
     required:
