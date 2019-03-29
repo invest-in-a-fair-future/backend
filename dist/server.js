@@ -10,6 +10,12 @@ var _cors = _interopRequireDefault(require("cors"));
 
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 
+var _auth = require("./auth");
+
+var _companiesRoute = require("./api/companies-route");
+
+var _usersRoute = require("./api/users-route");
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -42,6 +48,13 @@ app.use(_bodyParser.default.urlencoded({
   extended: true
 }));
 app.use(_bodyParser.default.json());
+
+_auth.Auth.configure(app);
+
+_companiesRoute.CompaniesRoute.configure(router);
+
+_usersRoute.UsersRoute.configure(router);
+
 app.use('/api', router);
 app.listen(port, function () {
   logger.info("App started at ".concat(port));

@@ -13,10 +13,10 @@ export class Auth {
   }
 
   static configurePassport(app) {
-    const localStrategy = LocalStrategy((username, password, done => {
+    const localStrategy = new LocalStrategy((username, password, done) => {
       //check username & password
       done(null, user);
-    }));
+    });
     passport.use(localStrategy);
   }
 
