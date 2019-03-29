@@ -2,6 +2,16 @@
   "application": {
     "name" : "invest-in-a-fair-future-api"
   },
+  "db": {
+    "name": "investinafairfuture",
+    "url": "localhost:27017",
+    "username": "root",
+    "password": "example"
+  },
+  "users": {
+    "salt": 10,
+    "secret": "InvestInAFairFutureRocks!!!"
+  },
   "log4js": {
     "appenders": {
       "out": {

@@ -7,7 +7,7 @@ exports.DB = void 0;
 
 var _mongodb = require("mongodb");
 
-var _config = _interopRequireDefault(require("config/config"));
+var _config = _interopRequireDefault(require("./config/config"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29,8 +29,13 @@ function () {
     value: function getClient() {
       return new Promise(function (resolve, reject) {
         if (!DB.client) {
-          _mongodb.MongoClient.connect(_config.default.db.url, function (e, client) {
-            if (err) {
+          var user = encodeURIComponent(_config.default.db.username);
+          var password = encodeURIComponent(_config.default.db.password);
+          var authMechanism = 'DEFAULT';
+          var url = "mongodb://".concat(user, ":").concat(password, "@").concat(_config.default.db.url, "/?authMechanism=").concat(authMechanism);
+
+          _mongodb.MongoClient.connect(url, function (e, client) {
+            if (e) {
               return reject(e);
             }
 
@@ -43,10 +48,22 @@ function () {
       });
     }
   }, {
+    key: "getDb",
+    value: function getDb() {
+      var _this = this;
+
+      return new Promise(function (resolve, reject) {
+        _this.getClient().then(function (client) {
+          var db = client.db(_config.default.db.name);
+          resolve(db);
+        }).catch(reject);
+      });
+    }
+  }, {
     key: "getCollection",
     value: function getCollection(name) {
       return new Promise(function (resolve, reject) {
-        DB.getClient().then(function (client) {
+        DB.getDb().then(function (client) {
           var collection = client.collection(name);
           resolve(collection);
         }).catch(reject);

@@ -9,6 +9,14 @@ var _passport = _interopRequireDefault(require("passport"));
 
 var _passportLocal = _interopRequireDefault(require("passport-local"));
 
+var _bcrypt = _interopRequireDefault(require("bcrypt"));
+
+var _log4js = _interopRequireDefault(require("log4js"));
+
+var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
+
+var _config = _interopRequireDefault(require("./config/config"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25,6 +33,16 @@ function () {
   }
 
   _createClass(Auth, null, [{
+    key: "getLogger",
+    value: function getLogger() {
+      if (!Auth.logger) {
+        Auth.logger = _log4js.default.getLogger();
+        Auth.logger.addContext('source', 'Auth');
+      }
+
+      return Auth.logger;
+    }
+  }, {
     key: "configure",
     value: function configure(app) {
       var dotenv = require('dotenv');
@@ -36,12 +54,52 @@ function () {
   }, {
     key: "configurePassport",
     value: function configurePassport(app) {
+      var _this = this;
+
       var localStrategy = new _passportLocal.default(function (username, password, done) {
-        //check username & password
+        DB.getCollection('users').then(function (users) {
+          return users.findOne({
+            email: username
+          });
+        }).then(function (user) {
+          if (!user) {
+            throw new Error('User not found');
+          }
+
+          var result = _bcrypt.default.compareSync(password, user.password);
+
+          if (result) {
+            return user;
+          } else {
+            throw new Error('Invalid password');
+          }
+        }).then(function (user) {
+          done(null, user);
+        }).catch(function (e) {
+          _this.getLogger().error(e);
+
+          done(null, false, {
+            message: 'Unable to authenticate.'
+          });
+        });
         done(null, user);
       });
 
       _passport.default.use(localStrategy);
+    }
+  }, {
+    key: "generateToken",
+    value: function generateToken(user) {
+      delete user.password;
+      this.getLogger().info(user);
+      var credentials = {
+        token: _jsonwebtoken.default.sign(user, _config.default.users.secret, {
+          expiresIn: '30d'
+        }),
+        validUntil: new Date()
+      };
+      credentials.validUntil.setDate(credentials.validUntil.getDate() + 30);
+      return credentials;
     } //
     // static configureExpress(app) {
     //   const session = require('express-session');
