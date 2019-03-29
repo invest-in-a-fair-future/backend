@@ -8,7 +8,7 @@ export class Auth {
     const dotenv = require('dotenv');
     dotenv.config();
 
-    this.configureExpress(app);
+    // this.configureExpress(app);
     this.configurePassport(app);
   }
 
@@ -19,22 +19,22 @@ export class Auth {
     });
     passport.use(localStrategy);
   }
-
-  static configureExpress(app) {
-    const session = require('express-session');
-
-    // config express-session
-    const sess = {
-      secret: process.env.SESSION_SECRET,
-      cookie: {},
-      resave: false,
-      saveUninitialized: true
-    };
-
-    if (app.get('env') === 'production') {
-      sess.cookie.secure = true; // serve secure cookies, requires https
-    }
-
-    app.use(session(sess));
-  }
+  //
+  // static configureExpress(app) {
+  //   const session = require('express-session');
+  //
+  //   // config express-session
+  //   const sess = {
+  //     secret: process.env.SESSION_SECRET,
+  //     cookie: {},
+  //     resave: false,
+  //     saveUninitialized: true
+  //   };
+  //
+  //   if (app.get('env') === 'production') {
+  //     sess.cookie.secure = true; // serve secure cookies, requires https
+  //   }
+  //
+  //   app.use(session(sess));
+  // }
 }
