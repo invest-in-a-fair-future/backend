@@ -1,0 +1,319 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Invest in a Fair Future API
+  description: API backend for Invest In a Fair Furture API
+  contact:
+    name: Invest in a Fair Future API
+    url: https://www.investinafairfuture.org
+    email: developer@investinafairfuture.org
+  license:
+    name: Apache-2.0
+    url: https://opensource.org/licenses/Apache-2.0
+paths:
+  /users:
+    post:
+      summary: Create a new user
+      description: Create a new user
+      parameters:
+        - in: body
+          name: 'user'
+          description: 'User object'
+          schema:
+            $ref: '#/definitions/userCreate'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/userBase'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error'
+    get:
+      summary: Get user information
+      description: Get user information
+      parameters:
+        - in: header
+          name: 'Authorization'
+          description: "OAuth2 Token (ex: 'Bearer RsT5OjbzRn430zqMLgV3Ia')"
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/userBase'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/error'
+    put:
+      summary: Update current user informerion
+      description: Update current user information
+      parameters:
+        - in: header
+          name: 'Authorization'
+          description: "OAuth2 Token (ex: 'Bearer RsT5OjbzRn430zqMLgV3Ia')"
+          type: string
+        - in: body
+          name: 'user'
+          description: 'User object'
+          schema:
+            $ref: '#/definitions/userCreate'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/userBase'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error'
+
+  /companies:
+    post:
+      summary: Create a new company with given user
+      description: Create a new company with given user
+      parameters:
+        - in: header
+          name: 'Authorization'
+          description: "OAuth2 Token (ex: 'Bearer RsT5OjbzRn430zqMLgV3Ia')"
+          type: string
+        - in: body
+          name: 'Company'
+          description: Company information
+          schema:
+            $ref: '#/definitions/companyBase'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/companyBase'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error'
+    get:
+      summary: Get companies
+      description: Get companies
+      parameters:
+        - in: header
+          name: 'Authorization'
+          description: "OAuth2 Token (ex: 'Bearer RsT5OjbzRn430zqMLgV3Ia')"
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/companyArray'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error'
+  /companies/{companyId}:
+    put:
+      summary: Update company information
+      description: Update company information
+      parameters:
+        - in: path
+          name: companyId
+          description: Unique identifier of the company
+          type: string
+          required: true
+        - in: header
+          name: 'Authorization'
+          description: "OAuth2 Token (ex: 'Bearer RsT5OjbzRn430zqMLgV3Ia')"
+          type: string
+        - in: body
+          name: 'Company'
+          description: Company information
+          schema:
+            $ref: '#/definitions/companyBase'
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/companyBase'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/error'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error'
+definitions:
+  companyArray:
+    type: object
+    required:
+      - companies
+    properties:
+      companies:
+        type: array
+        items:
+          $ref: '#/definitions/companyBase'
+  companyBase:
+    type: object
+    required:
+      - name
+      - taxId
+      - country
+      - phoneNumber
+      - email
+      - address
+    properties:
+      id:
+        type: string
+        description: Unique identifier of the company
+        example: '40dc9d2b-7b38-47f4-9d23-581ca427d9bc'
+        readOnly: true
+      name:
+        type: string
+        example: 'Invest in a Fair Future B.V.'
+      taxId:
+        type: string
+        example: 12345678901
+      phoneNumber:
+        type: string
+        example: '+31600000000'
+        description: Phone number of the user
+      country:
+        type: string
+        description: ISO code of the country
+        example: 'NL'
+      email:
+        type: string
+        description: Username and email address of the user
+        example: 'info@investinafairfuture.org'
+      address:
+        type: string
+        description: Legal address of the company
+        example: 'Tractieweg 41, 3534 AP Utrecht'
+  userBase:
+    type: object
+    required:
+      - email
+      - name
+      - type
+    properties:
+      id:
+        type: string
+        description: Unique identifier of the user
+        example: 'c447d376-6a46-4e98-89da-f86a81255503'
+        readOnly: true
+      email:
+        type: string
+        description: Username and email address of the user
+        example: 'john@investinafairfuture.org'
+      name:
+        type: string
+        description: Name of the user
+        example: 'Invest in a Fair Future'
+      type:
+        type: string
+        example: 'company'
+        description: Type of the user
+        enum:
+          - company
+          - partner
+          - communityRepresentative
+      phoneNumber:
+        type: string
+        example: '+31600000000'
+        description: Phone number of the user
+      country:
+        type: string
+        description: ISO code of the country
+        example: 'NL'
+  userCreate:
+    type: object
+    allOf:
+      - $ref: '#/definitions/userBase'
+    required:
+      - password
+    properties:
+      password:
+        type: string
+        example: 'abcd1234'
+  errorBase:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      severity:
+        type: string
+        example: 'error'
+        enum:
+          - warning
+          - error
+          - critical
+      code:
+        type: string
+        description: Code of the error
+        example: 'ERR01'
+      message:
+        type: string
+        description: Human readable description of the error
+        example: 'Invalid information sent.'
+  error:
+    type: object
+    allOf:
+      - $ref: '#/definitions/errorBase'
+    properties:
+      innerErrors:
+        type: array
+        items:
+          $ref: '#/definitions/errorBase'
