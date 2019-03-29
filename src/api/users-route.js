@@ -1,8 +1,8 @@
-import bcrypt from 'bcrypt';
-import config from '../config/config';
-import {Auth} from "../auth";
+// import bcrypt from 'bcrypt';
+// import config from '../config/config';
+// import {Auth} from "../auth";
 import log4js from "log4js";
-import { DB } from '../DB';
+// import { DB } from '../DB';
 
 export class UsersRoute {
   static getLogger() {

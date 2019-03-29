@@ -5,15 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.UsersRoute = void 0;
 
-var _bcrypt = _interopRequireDefault(require("bcrypt"));
-
-var _config = _interopRequireDefault(require("../config/config"));
-
-var _auth = require("../auth");
-
 var _log4js = _interopRequireDefault(require("log4js"));
-
-var _DB = require("../DB");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -23,6 +15,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+// import { DB } from '../DB';
 var UsersRoute =
 /*#__PURE__*/
 function () {
