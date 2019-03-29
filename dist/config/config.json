@@ -4,9 +4,9 @@
   },
   "db": {
     "name": "investinafairfuture",
-    "url": "localhost:27017",
-    "username": "root",
-    "password": "example"
+    "url": "ds062797.mlab.com:62797/investinafairfuture",
+    "username": "investinafairfutureapp",
+    "password": ""
   },
   "users": {
     "salt": 10,

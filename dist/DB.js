@@ -31,8 +31,7 @@ function () {
         if (!DB.client) {
           var user = encodeURIComponent(_config.default.db.username);
           var password = encodeURIComponent(_config.default.db.password);
-          var authMechanism = 'DEFAULT';
-          var url = "mongodb://".concat(user, ":").concat(password, "@").concat(_config.default.db.url, "/?authMechanism=").concat(authMechanism);
+          var url = "mongodb://".concat(user, ":").concat(password, "@").concat(_config.default.db.url);
 
           _mongodb.MongoClient.connect(url, function (e, client) {
             if (e) {

@@ -10,9 +10,8 @@ export class DB {
 
         const user = encodeURIComponent(config.db.username);
         const password = encodeURIComponent(config.db.password);
-        const authMechanism = 'DEFAULT';
 
-        const url = `mongodb://${user}:${password}@${config.db.url}/?authMechanism=${authMechanism}`;
+        const url = `mongodb://${user}:${password}@${config.db.url}`;
 
         MongoClient.connect(url, (e, client) => {
           if(e) {
